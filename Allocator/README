@@ -1,0 +1,17 @@
+Note: You only need to do this if you want to compile the C files to WASM from scratch, we'll just be dropping in the compiled WASM binaries into P0, so this should not be necessary 
+
+Installation instructions:
+These steps were performed on a Linux system, Windows installation is theoretically possible but I do not have instructions available for it.
+1. Install python3 and python3-pip
+2. Use pip to install pywasm (pip3 install pywasm)
+3. Compile C to WAT using WASMFiddle (https://wasdk.github.io/WasmFiddle/) - this is the best way I've found to generate minimal WASM code, attempting to build the tools necessary to do this locally does not work for my instance of WSL, and Emscripten would require re-implementing the expected environment in Python. 
+4. Compile WAT to WASM using wat2wasm
+
+Necessary modifications:
+By default pywasm has a bug when printing contents of memory, leading to crashes with compiled code
+Therefore, the pywasm intallation's structure.py file must be fixed in order for pywasm to be able to run the code
+For me this file is located at /home/patrick/.local/lib/python3.6/site-packages/pywasm/structure.py - but it will vary depending on your OS and install location
+
+Line 398 of this file originally reads "return self.init[:32].decode()" - instead this should be changed to "return str(self.init[:32])"
+
+Also, inside pywasm's execution.py file, on line 427, there is a conditional that reads "if r:" - this should be changed to "if r != None:". 

@@ -1,0 +1,12 @@
+var x : reference integer
+x = 5 -> not allocated yet so error
+
+ReferenceObject(allocated = False)
+genNew -> set allocated true
+free -> set allocated false
+
+free not allocated = error
+assign to not allocated = error
+
+new makes it allocated
+free makes it not allocated
